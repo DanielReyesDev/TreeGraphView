@@ -551,14 +551,58 @@ open class BaseTreeGraphView: UIView {
                 
                 self.selectedModelNodes = Set(arrayLiteral: nearestChild)
             }
+        } else if self.selectedModelNodes.count == 0 {
+            self.selectedModelNodes = Set(arrayLiteral: self.modelRoot)
+        }
+        
+        self.scrollSelectedModelNodesToVisibleAnimated(true)
+    }
+    
+    
+    func moveUp( sender:Any ) {
+        if self.treeGraphOrientation == .horizontal || self.treeGraphOrientation == .horizontalFlipped {
+            self.moveToSibling(by: 1)
         }
     }
+    
+    func moveDown( sender:Any ) {
+        if self.treeGraphOrientation == .horizontal || self.treeGraphOrientation == .horizontalFlipped {
+            self.moveToSibling(by: -1)
+        }
+    }
+    
+    func moveLeft( sender:Any ) {
+        if self.treeGraphOrientation == .horizontal || self.treeGraphOrientation == .horizontalFlipped {
+            self.moveToParent(sender: sender)
+        }
+    }
+    
+    
+    func moveRight( sender:Any ) {
+        if self.treeGraphOrientation == .horizontal || self.treeGraphOrientation == .horizontalFlipped {
+            self.moveToNearestChild(sender: sender)
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    // MARK:- ModelNode -> SubtreeView Relationship Management
+    
+    func subtreeViewForModelNode(node: MyTreeGraphModelNode) -> BaseSubtreeView? {
+        return _modelNodeToSubtreeViewMapTable?[node] as? BaseSubtreeView
+    }
+    
     
     func setSubtreeView(_ subtreeView: BaseSubtreeView, for modelNode: MyTreeGraphModelNode) {
         _modelNodeToSubtreeViewMapTable[modelNode] = subtreeView
     }
     
-    
+    // MARK:- Model Tree Navigation
     
     public var modelRoot: MyTreeGraphModelNode!
     
